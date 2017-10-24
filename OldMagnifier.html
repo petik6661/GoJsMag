@@ -210,9 +210,10 @@
 </head>
 <body onload="init()">
 <div id="sample" style="position: relative;">
-  <div id="myDiagramDiv" style="background-color: white; border: solid 1px black; width: 100%; height: 700px"></div>
+  <div id="myDiagramDiv" style="background-color: white; border: solid 1px black; width: 500px; height: 300px"></div>
   <div id="myOverviewDiv"></div> <!-- Styled in a <style> tag at the top of the html page -->
   <label><input type="checkbox" onclick="showMagnifier()" />Show Magnifier</label>
-</div>
+  <p style="margin-bottom:0">Steps:</p>
+<ul style="margin-top:0"><li>Click to any flag button</li><li>Popup with message "click" should appear</li><li>Enabled Magnifier</li><li>Again click to any flag button</li><li>If popup with message "mouseEnter click" appeared then mouseEnter was triggered</li></ul>
 </body>
 </html>
