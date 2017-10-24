@@ -89,12 +89,19 @@
           // the country flag
           $("Button", 
             {
-              click: function(){ alert('click') },
+				row: 0, column: 1,
+				margin: 1,
+				"ButtonBorder.width": 36,
+                "ButtonBorder.height": 26,
+				"ButtonBorder.stroke": "transparent",
+                click: function(){ alert('click') },
+				mouseEnter: function(e, obj) { storeClickEvent(false, function(){ alert('mouseEnter click'); }); },
+				mouseLeave: function(e, obj) { releaseClickEvent(); }
             },
           $(go.Picture,
             {
-              row: 0, column: 1,
-              desiredSize: new go.Size(34, 26), margin: 2,
+              desiredSize: new go.Size(32, 24), margin: 2,
+              
               imageStretch: go.GraphObject.Uniform,
               alignment: go.Spot.TopRight
             },
@@ -127,6 +134,15 @@
           nodeDataArray: nodeDataArray });
   }
   var myOverview = null;
+  function storeClickEvent(releaseAfterExec, fn) {
+    window._noConflictGoBtnClick = fn;
+    window._noConflictGoBtnReleaseAfterExec = releaseAfterExec;
+  }
+  
+  function releaseClickEvent() {
+  	window._noConflictGoBtnClick = null;
+  }
+  
   function showMagnifier() {
     var myOverviewDiv = document.getElementById("myOverviewDiv");
     if (myOverview === null || myOverviewDiv.style.display === "none") {
@@ -153,6 +169,26 @@
         e.viewPoint = myDiagram.transformDocToView(e.documentPoint);
         myDiagram.toolManager.doMouseMove();
       };
+	  
+	   myOverview.addDiagramListener('ObjectSingleClicked', function (e, obj) {
+        if (window._noConflictGoBtnClick == undefined || window._noConflictGoBtnClick == null) {
+            return;
+        }
+
+        var event = window._noConflictGoBtnClick;
+        if(window._noConflictGoBtnReleaseAfterExec != undefined && _noConflictGoBtnReleaseAfterExec == true) {
+            window._noConflictGoBtnClick = null;
+        }
+        // execute in parallel to not block UI
+        setTimeout(function () { event(e.diagram.lastInput); }, 0);
+
+        if (e.stopPropagation) e.stopPropagation();
+        if (e.preventDefault) e.preventDefault();
+        e.cancelBubble = true;
+        e.returnValue = false;
+        return false;
+      });
+	  
       // implement the magnifying glass functionality, to have the Overview show part of the Diagram where the mouse is
       myDiagram.toolManager.doMouseMove = function() {
         go.ToolManager.prototype.doMouseMove.call(myDiagram.toolManager);
