@@ -1,0 +1,2 @@
+# GoJsMag
+GoJS magnifier test
