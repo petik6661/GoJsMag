@@ -87,6 +87,10 @@
             },
             new go.Binding("text", "name")),
           // the country flag
+          $(go.Button, 
+            {
+              click: function(){ alert('click') },
+            },
           $(go.Picture,
             {
               row: 0, column: 1,
@@ -94,7 +98,8 @@
               imageStretch: go.GraphObject.Uniform,
               alignment: go.Spot.TopRight
             },
-            new go.Binding("source", "nation", theNationFlagConverter)),
+            new go.Binding("source", "nation", theNationFlagConverter))
+          ),
           // the additional textual information
           $(go.TextBlock,
             {
